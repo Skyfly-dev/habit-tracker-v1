@@ -12,4 +12,4 @@ A command-line habit tracking application built with pure Python.
 
 ## How to Run
 1. Clone the repository.
-2. Run `python habit_tracker.py` in your terminal.
+2. Run `python habitTracker.py` in your terminal.
