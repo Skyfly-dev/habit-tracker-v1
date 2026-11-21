@@ -1,0 +1,14 @@
+[theme]
+# A warm, muted terracotta/coral for buttons (premium and cozy)
+primaryColor = "#D97757" 
+
+# The main background: A soft, warm off-white/cream (not blinding white)
+backgroundColor = "#F9F6F0" 
+
+# The sidebar: A slightly darker warm beige for subtle contrast
+secondaryBackgroundColor = "#EFE9DF" 
+
+# Text: Deep espresso/charcoal instead of harsh black
+textColor = "#3D3B3A" 
+
+font = "sans serif"
