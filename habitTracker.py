@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from datetime import date
+from datetime import date,timedelta
 
 BASE_DIR=Path(__file__).resolve().parent
 FILE_PATH=BASE_DIR/"habits.json"
@@ -138,8 +138,68 @@ def delete_habit(data,name):
     return data
 
 
-    
 
+#get streak value
+def get_streak(data,name):
+    habit_id=find_habit_id(data,name)
+    if habit_id is None:
+        return 0            
+    done_dates=set()
+    for entry in data["log"]:
+        if entry["habit_id"]==habit_id and entry["status"]=="done":
+            done_dates.add(entry["date"])
+    if not done_dates:
+            
+            return 0
+        
+    current_day=date.today()
+
+    if str(current_day) not in done_dates:
+            current_day=current_day - timedelta(days=1)
+
+    print(f"DEBUG:Done dates for{name}:{done_dates}")
+    print(f"DEBUG:Today is:{str(current_day)}")
+
+    streak=0
+    while str(current_day)  in done_dates:
+            streak +=1
+            current_day=current_day - timedelta(days=1)
+
+    return streak
+
+#get history
+def get_history(data,name,days=7):
+    habit_id=find_habit_id(data,name)
+    if habit_id is None:
+        return {}
+    
+    history={}
+    today=date.today()
+
+
+#lopp backwards from 6 days ago to today (for streamlit bar chart)
+    for i in range(days-1,-1,-1):
+        target_date=today-timedelta(days=i)
+        date_str=str(target_date)
+
+        status_value=0  
+
+        #check log for specific date
+        for entry in data["log"]:
+            if entry["habit_id"]==habit_id and entry["date"]==date_str:
+                if entry["status"]=="done":
+                    status_value=1
+                break
+
+        history[date_str]=status_value
+    return history
+        
+
+
+
+
+
+         
 def main():
     """
     the main CLI loop that handles user input.
@@ -152,7 +212,8 @@ def main():
         print("3. Mark Skip")
         print("4. View Today")
         print("5. Delete")
-        print("6.Quit")
+        print("6. Get Streak")
+        print("7.Quit")
 
         choice=input("Enter choice: ")
 
@@ -184,8 +245,12 @@ def main():
             save_data(data)
             
 
-        
         elif choice=="6":
+            name=input("which habit u wanna find the streak of?")
+            get_streak(data,name)
+        
+
+        elif choice=="7":
             print("Goodbye!:) see u again......")
             break
 
